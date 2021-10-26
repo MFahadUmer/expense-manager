@@ -12,6 +12,12 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('My Expense Manager'),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.add),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -30,6 +36,10 @@ class MyApp extends StatelessWidget {
               ],
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {},
         ),
       ),
     );
