@@ -1,34 +1,52 @@
+import 'package:flutter/material.dart';
+
+import './widget/transaction_list.dart';
 import './widget/new_transaction.dart';
 import './modal/transaction.dart';
-import './widget/user_transactions.dart';
-import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Expense Manager',
+      home: HomePage(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<Transaction> _userTranasction = [
     Transaction('123', 'Internet', 2000, DateTime.now()),
     Transaction('124', 'Fuel', 1500, DateTime.now())
   ];
+
+  void startAddNewTransaction(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return GestureDetector(
+          child: NewTransaction(addNewTransaction),
+          onTap: () {},
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
 
   void addNewTransaction(String title, double amount) {
     final newTx =
         Transaction(DateTime.now().toString(), title, amount, DateTime.now());
     setState(() {
       _userTranasction.add(newTx);
-    });
-  }
-
-  void startAddNewTransaction(BuildContext ctx) {
-    showModalBottomSheet(context: ctx, builder: (_){
-      return Text("Hey Worls");
     });
   }
 
@@ -40,13 +58,7 @@ class _MyAppState extends State<MyApp> {
           title: Text('My Expense Manager'),
           actions: [
             IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (_) {
-                      return Text('Modal bottom sheet', style: TextStyle(fontSize: 30));
-                    });
-              },
+              onPressed: () => startAddNewTransaction(context),
               icon: Icon(Icons.add),
             ),
           ],
@@ -64,7 +76,7 @@ class _MyAppState extends State<MyApp> {
                     elevation: 5,
                   ),
                 ),
-                UserTranactions(_userTranasction),
+                TransactionList(_userTranasction),
               ],
             ),
           ),
