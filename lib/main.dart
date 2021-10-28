@@ -12,7 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Expense Manager',
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+        accentColor: Colors.indigo,
+      ),
+      title: 'Personal Expenses',
       home: HomePage(),
     );
   }
@@ -52,39 +56,37 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('My Expense Manager'),
-          actions: [
-            IconButton(
-              onPressed: () => startAddNewTransaction(context),
-              icon: Icon(Icons.add),
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  width: double.infinity,
-                  child: Card(
-                    child: Text('Chart'),
-                    elevation: 5,
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Personal Expenses'),
+        actions: [
+          IconButton(
+            onPressed: () => startAddNewTransaction(context),
+            icon: Icon(Icons.add),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                width: double.infinity,
+                child: Card(
+                  child: Text('Chart'),
+                  elevation: 5,
                 ),
-                TransactionList(_userTranasction),
-              ],
-            ),
+              ),
+              TransactionList(_userTranasction),
+            ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => startAddNewTransaction(context),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => startAddNewTransaction(context),
       ),
     );
   }
