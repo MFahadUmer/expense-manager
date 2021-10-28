@@ -37,8 +37,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Transaction> _userTranasction = [
-    Transaction('123', 'Internet', 2000, DateTime.now()),
-    Transaction('124', 'Fuel', 1500, DateTime.now())
+    // Transaction('123', 'Internet', 2000, DateTime.now()),
+    // Transaction('124', 'Fuel', 1500, DateTime.now())
   ];
 
   void startAddNewTransaction(BuildContext ctx) {
