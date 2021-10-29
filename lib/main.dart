@@ -52,6 +52,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  List<Transaction> get _recentTransactions {
+    return _userTranasction.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
+
   void addNewTransaction(String title, double amount) {
     final newTx =
         Transaction(DateTime.now().toString(), title, amount, DateTime.now());
@@ -81,7 +91,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              chart(),
+              Chart(_recentTransactions),
               TransactionList(_userTranasction),
             ],
           ),
