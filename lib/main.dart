@@ -6,6 +6,9 @@ import './widget/new_transaction.dart';
 import './modal/transaction.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]); Stop landscape mode
   runApp(MyApp());
 }
 
@@ -56,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     return _userTranasction.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 7),
+          const Duration(days: 7),
         ),
       );
     }).toList();
@@ -75,8 +78,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  bool _showChart = false;
+
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text(
         'Personal Expenses',
@@ -85,36 +92,61 @@ class _HomePageState extends State<HomePage> {
       actions: [
         IconButton(
           onPressed: () => startAddNewTransaction(context),
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
         ),
       ],
+    );
+
+    final txList = SizedBox(
+      height: MediaQuery.of(context).size.height * 0.70 -
+          appBar.preferredSize.height -
+          -MediaQuery.of(context).padding.top,
+      child: TransactionList(_userTranasction, deleteTransactions),
     );
 
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.30 -
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Show Chart'),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      })
+                ],
+              ),
+            if (!isLandscape)
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.3 -
                     appBar.preferredSize.height -
                     MediaQuery.of(context).padding.top,
                 child: Chart(_recentTransactions),
               ),
-              Container(
-                  height: MediaQuery.of(context).size.height * 0.70 -
-                      appBar.preferredSize.height -
-                      -MediaQuery.of(context).padding.top,
-                  child: TransactionList(_userTranasction, deleteTransactions)),
-            ],
-          ),
+            if (!isLandscape) txList,
+            if (isLandscape)
+              _showChart
+                  ? SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8 -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top,
+                      child: Chart(_recentTransactions),
+                    )
+                  : txList,
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => startAddNewTransaction(context),
       ),
     );
